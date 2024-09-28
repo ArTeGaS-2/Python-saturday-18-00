@@ -52,8 +52,9 @@ def choose_difficulty():
     elif choise == '3':
         return 1, 100, 10
 
-play_again = 'так'
+def game():
+    play_again = 'так'
 
-while play_again.lower() == 'так':
-    play_game()
-    play_again = input("Бажаєте зіграти ще раз? (так/ні) \n")
+    while play_again.lower() == 'так':
+        play_game()
+        play_again = input("Бажаєте зіграти ще раз? (так/ні) \n")
