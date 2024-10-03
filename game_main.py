@@ -31,14 +31,14 @@ SPEED = 5 # швидкість слимака
 # Основний ігровий цикл
 running = True
 while running:
-    clock.tick(60) # Обмежуємо кількість кадрів на секунду у вікні
+    screen.fill(background_color_2) # Заповньюємо екран обраним кольором
 
+    clock.tick(60) # Обмежуємо кількість кадрів на секунду у вікні
+    
     # Основний обробник подій у грі
     for event in pygame.event.get(): # Перебираємо події у грі
         if event.type == pygame.QUIT: # Якщо подій - вихід / закриття вікна
             running = False # Завершення ігрового циклу (while running)
-
-    screen.fill(background_color_2) # Заповньюємо екран обраним кольором
 
     pygame.draw.circle(screen, SLIME_COLOR,(slime_x, slime_y), SLIME_RADIUS)
 
