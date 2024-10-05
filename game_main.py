@@ -1,47 +1,77 @@
 import pygame
 
-pygame.init() # Ініціалізація бібліотеки
+pygame.init()
 
 clock = pygame.time.Clock() # Додавання лічильника
 
 # Розміри вікна
-WIDTH, HEIGHT = 800, 600 # Ширина та висота
-
-# Налаштування дисплею
-screen = pygame.display.set_mode((WIDTH, HEIGHT)) 
-
-# Заголовок вікна
+WIDTH, HEIGHT = 800, 600 # Ширина і висота
+screen = pygame.display.set_mode((WIDTH, HEIGHT))
 pygame.display.set_caption("Їстівна планета")
 
 # Колір фону
-background_color = (255, 255, 255) # Білий колір у RGB
-background_color_2 = (72, 209, 86)
+background_color = (255, 255, 255)
+background_color_2 = '#B6FEFF'
 
-# Колір і розмір слимака
-SLIME_COLOR = (0,255,0)
-SLIME_COLOR_2 = (0,255,0)
-
+# Колір і розмір слайма
+SLIME_COLOR = (0, 255, 0)
 SLIME_RADIUS = 20
 
-# Початкова позиція слимака (центр екрану)
+# Початкова позиція слайма (центр екрану)
 slime_x, slime_y = WIDTH // 2, HEIGHT // 2
 
-SPEED = 5 # швидкість слимака
+# Швидкість слайма
+SPEED = 5
 
 # Основний ігровий цикл
 running = True
 while running:
-    screen.fill(background_color_2) # Заповньюємо екран обраним кольором
+    # Заповнює екранний простір кольором фону
+    screen.fill(background_color_2)
 
-    clock.tick(60) # Обмежуємо кількість кадрів на секунду у вікні
+    clock.tick(60) # Обмежує кількість кадрів на секунду
+
+    # Основний обробник подій
+    for event in pygame.event.get(): # Перебирає події
+        if event.type == pygame.QUIT: # Якщо подія - Вихід
+            running = False # Перериває виконання основного ігрового циклу
+
+    # Отримання стану клавіш
+    keys = pygame.key.get_pressed()
+
+    # Рух на WASD у восьми напрямках
+    if keys[pygame.K_w] and keys[pygame.K_a]:
+        slime_x -= SPEED // 1.414
+        slime_y -= SPEED // 1.414
+    elif keys[pygame.K_w] and keys[pygame.K_d]:
+        slime_x += SPEED // 1.414
+        slime_y -= SPEED // 1.414
+    elif keys[pygame.K_s] and keys[pygame.K_a]:
+        slime_x -= SPEED // 1.414
+        slime_y += SPEED // 1.414
+    elif keys[pygame.K_s] and keys[pygame.K_d]:
+        slime_x += SPEED // 1.414
+        slime_y += SPEED // 1.414
+
+    elif keys[pygame.K_w] or keys[pygame.K_UP]:
+        slime_y -= SPEED
+    elif keys[pygame.K_s] or keys[pygame.K_DOWN]:
+        slime_y += SPEED
+    elif keys[pygame.K_a] or keys[pygame.K_LEFT]:
+        slime_x -= SPEED
+    elif keys[pygame.K_d] or keys[pygame.K_RIGHT]:
+        slime_x += SPEED
+
     
-    # Основний обробник подій у грі
-    for event in pygame.event.get(): # Перебираємо події у грі
-        if event.type == pygame.QUIT: # Якщо подій - вихід / закриття вікна
-            running = False # Завершення ігрового циклу (while running)
+    # Малювання слайма
+    pygame.draw.circle(
+        screen, # Поверхня
+        SLIME_COLOR, # Колір
+        (slime_x, slime_y), # Координати
+        SLIME_RADIUS) # Розмір
 
-    pygame.draw.circle(screen, SLIME_COLOR,(slime_x, slime_y), SLIME_RADIUS)
+    # Оновлення дисплею
+    pygame.display.flip()
 
-    pygame.display.flip() # Оновлення дисплею
+pygame.quit() # Вимикає вікно pygame
 
-pygame.quit # Закриває вікно, коли/якщо завершується основний ігровий цикл
