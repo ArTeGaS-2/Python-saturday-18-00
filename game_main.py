@@ -1,4 +1,7 @@
 import pygame
+import sys
+import random
+from pygame.locals import *
 
 pygame.init()
 
@@ -19,6 +22,18 @@ SLIME_RADIUS = 20
 
 # Початкова позиція слайма (центр екрану)
 slime_x, slime_y = WIDTH // 2, HEIGHT // 2
+
+# Завантаження спрайту слайма
+slime_image = pygame.image.load('slime.png').convert_alpha()
+
+# Масштабування спрайта до бажаного розміру
+slime_size = 40
+slime_image = pygame.transform.scale(
+    slime_image, # посилання на зображення
+    (slime_size, slime_size)) # розмір по осям "x" та "y"
+
+# Початковий напрямок
+direction = 0 # Кут в градусах
 
 # Швидкість слайма
 SPEED = 5
@@ -62,13 +77,18 @@ while running:
     elif keys[pygame.K_d] or keys[pygame.K_RIGHT]:
         slime_x += SPEED
 
-    
-    # Малювання слайма
-    pygame.draw.circle(
-        screen, # Поверхня
-        SLIME_COLOR, # Колір
-        (slime_x, slime_y), # Координати
-        SLIME_RADIUS) # Розмір
+    def draw_circle():
+        # Малювання слайма
+        pygame.draw.circle(
+            screen, # Поверхня
+            SLIME_COLOR, # Колір
+            (slime_x, slime_y), # Координати
+            SLIME_RADIUS) # Розмір
+        
+    # отримуємо прямокутник спрайта
+    slime_rect = slime_image.get_rect(center=(slime_x, slime_y))
+    # Малювання спрайта на екрані
+    screen.blit(slime_image, slime_rect)
 
     # Оновлення дисплею
     pygame.display.flip()
