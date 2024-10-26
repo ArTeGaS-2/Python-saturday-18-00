@@ -3,68 +3,36 @@ import sys
 import random
 from pygame.locals import *
 
-def Move_Animation():
-    if moving:
-        animation_phase += animation_speed
-        if animation_phase >= 360:
-            animation_phase = 0
-        scale_x = 0.8 + 0.5 * pygame.math.sin(pygame.math.radians(animation_phase))
-        scale_y = 1.3 + 0.5 * pygame.math.sin(pygame.math.radians(animation_phase))
-
-pygame.init()
-
-animation_phase = 0 # Фаза анімації
-animation_speed = 5 # Швидкість анімації
-
-clock = pygame.time.Clock() # Додавання лічильника
-
 # Розміри вікна
 WIDTH, HEIGHT = 800, 600 # Ширина і висота
-screen = pygame.display.set_mode((WIDTH, HEIGHT))
-pygame.display.set_caption("Їстівна планета")
-
 # Колір фону
 background_color = (255, 255, 255)
 background_color_2 = '#B6FEFF'
-
-# Колір і розмір слайма
-SLIME_COLOR = (0, 255, 0)
-SLIME_RADIUS = 20
-
-# Початкова позиція слайма (центр екрану)
-slime_x, slime_y = WIDTH // 2, HEIGHT // 2
-
-# Завантаження спрайту слайма
-slime_image = pygame.image.load('slime.png').convert_alpha()
-
 # Масштабування спрайта до бажаного розміру
 slime_size = 60
-slime_image = pygame.transform.scale(
+# Швидкість слайма
+SPEED = 5
+ANIMATTION_SPEED = 0.1
+
+
+
+def init_game():
+    pygame.init()
+    screen = pygame.display.set_mode((WIDTH, HEIGHT))
+    pygame.display.set_caption("Їстівна планета")
+    return screen
+
+
+
+def load_slime_image():
+    # Завантаження спрайту слайма
+    slime_image = pygame.image.load('slime.png').convert_alpha()
+
+    return pygame.transform.scale(
     slime_image, # посилання на зображення
     (slime_size, slime_size)) # розмір по осям "x" та "y"
 
-# Початковий напрямок
-direction = 0 # Кут в градусах
-
-# Швидкість слайма
-SPEED = 5
-
-# Основний ігровий цикл
-running = True
-while running:
-    # Заповнює екранний простір кольором фону
-    screen.fill(background_color_2)
-
-    clock.tick(60) # Обмежує кількість кадрів на секунду
-
-    # Основний обробник подій
-    for event in pygame.event.get(): # Перебирає події
-        if event.type == pygame.QUIT: # Якщо подія - Вихід
-            running = False # Перериває виконання основного ігрового циклу
-
-    # Отримання стану клавіш
-    keys = pygame.key.get_pressed()
-
+def slime_movemet(keys, slime_x, slime_y, SPEED, direction):
     # Визначення напрямку
     moving = False
     dx, dy = 0, 0
@@ -111,6 +79,51 @@ while running:
     # Оновлення позиції слайма
     slime_x += dx
     slime_y += dy
+
+    return slime_x, slime_y, direction, moving
+
+def lerp(a,b,t):
+    """ Лінійна інтероляція між "a" та "b" з коефіцієнт "t". """
+    return a + (b - a) * t
+
+def animate_slime(moving, direction, slime_image, slime_x, slime_y,
+                  current_scale_x, current_scale_y):
+    if moving:
+        if direction in [0, 180]: # Горизонтальний рух
+            target_scale_x, target_scale_y = 1.3, 0.8
+        elif direction in [90, 270]: # Вертикальний рух
+            target_scale_x, target_scale_y = 1.3, 0.8
+        else: # Діагональний рух
+
+    
+    
+# Ініціалізація гри
+screen = init_game()
+slime_image = load_slime_image()
+clock = pygame.time.Clock() # Додавання лічильника
+# Початкова позиція слайма (центр екрану)
+slime_x, slime_y = WIDTH // 2, HEIGHT // 2
+running = True
+
+current_scale_x = 1.0
+current_scale_y = 1.0
+direction = 0 # Кут в градусах
+# Основний ігровий цикл
+while running:
+    # Заповнює екранний простір кольором фону
+    screen.fill(background_color_2)
+
+    clock.tick(60) # Обмежує кількість кадрів на секунду
+
+    # Основний обробник подій
+    for event in pygame.event.get(): # Перебирає події
+        if event.type == pygame.QUIT: # Якщо подія - Вихід
+            running = False # Перериває виконання основного ігрового циклу
+
+    # Отримання стану клавіш
+    keys = pygame.key.get_pressed()
+
+    
 
     # Обертання спрайта у напрямку руху
     if moving:
