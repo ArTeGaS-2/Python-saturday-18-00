@@ -13,16 +13,13 @@ slime_size = 60
 # Швидкість слайма
 SPEED = 5
 ANIMATTION_SPEED = 0.1
-
-
+spawn_interval = 3 # Інтервал появи об'єктів (у секундах)
 
 def init_game():
     pygame.init()
     screen = pygame.display.set_mode((WIDTH, HEIGHT))
     pygame.display.set_caption("Їстівна планета")
     return screen
-
-
 
 def load_slime_image():
     # Завантаження спрайту слайма
@@ -31,6 +28,11 @@ def load_slime_image():
     return pygame.transform.scale(
     slime_image, # посилання на зображення
     (slime_size, slime_size)) # розмір по осям "x" та "y"
+
+def load_object_image():
+    # Завантаження спрайту об'єкту
+    object_image = pygame.image.load("object.png").convert_alpha()
+    return pygame.transform.scale(object_image, (30, 30))
 
 def slime_movemet(keys, slime_x, slime_y, SPEED, direction):
     # Визначення напрямку
@@ -114,10 +116,22 @@ def animate_slime(moving, direction, slime_image, slime_x, slime_y,
     slime_rect = rotated_slime.get_rect(center=(slime_x, slime_y))
     return rotated_slime, slime_rect, new_scale_x, new_scale_y
     
+def spawn_object():
+    # Випадкове розташування об'єкту на сцені
+    x = random.randint(0, WIDTH - 30)
+    y = random.randint(0, HEIGHT - 30)
+    return x,y
+
+def check_collision(slime_rect, object_rect):
+    return slime_rect.colliderect(object_rect)
+
 # Ініціалізація гри
 screen = init_game()
 slime_image = load_slime_image()
+object_image = load_object_image()
 clock = pygame.time.Clock() # Додавання лічильника
+last_spawn_time = 0
+
 # Початкова позиція слайма (центр екрану)
 slime_x, slime_y = WIDTH // 2, HEIGHT // 2
 running = True
@@ -125,6 +139,13 @@ running = True
 current_scale_x = 1.0
 current_scale_y = 1.0
 direction = 0 # Кут в градусах
+
+# Список для зберігання всіх об'єктів на сцені (але не персонаж)
+objects = []
+
+# Лічильник зібраних об'єктів
+collected_objects = 0
+
 # Основний ігровий цикл
 while running:
     # Заповнює екранний простір кольором фону
@@ -149,8 +170,27 @@ while running:
     # Малювання спрайта на екрані
     screen.blit(slime, slime_rect)
 
+    # Спавн об'єктів з інтервалом
+    current_time = pygame.time.get_ticks() // 1000  
+    if current_time - last_spawn_time >= spawn_interval:
+        object_x, object_y = spawn_object()
+        objects.append(pygame.Rect(object_x, object_y, 30, 30))  
+        last_spawn_time = current_time
+
+    for obj_rect in object [:]:
+        screen.blit(object_image, obj_rect.topleft)
+        # Перевірка на зіткнення
+        if check_collision(slime_rect, obj_rect):
+            objects.remove(obj_rect) # Видалення при зіткненні
+            collected_objects += 1 # + до лічильника
+
+    # Виведення кількості зібраних об'єктів на екран
+    font = pygame.font.SysFont(None, 36)
+    collected_text = font.render(f'Зібрано: {collected_objects}', 
+                                True, (0, 0, 0))
+    screen.blit(collected_text, (10, 10))
+
     # Оновлення дисплею
     pygame.display.flip()
 
 pygame.quit() # Вимикає вікно pygame
-
