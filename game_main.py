@@ -13,7 +13,7 @@ slime_size = 60
 # Швидкість слайма
 SPEED = 5
 ANIMATTION_SPEED = 0.1
-spawn_interval = 3 # Інтервал появи об'єктів (у секундах)
+spawn_interval = 0.001 # Інтервал появи об'єктів (у секундах)
 
 def init_game():
     pygame.init()
@@ -171,13 +171,13 @@ while running:
     screen.blit(slime, slime_rect)
 
     # Спавн об'єктів з інтервалом
-    current_time = pygame.time.get_ticks() // 1000  
+    current_time = pygame.time.get_ticks() // 1000
     if current_time - last_spawn_time >= spawn_interval:
         object_x, object_y = spawn_object()
         objects.append(pygame.Rect(object_x, object_y, 30, 30))  
         last_spawn_time = current_time
 
-    for obj_rect in object [:]:
+    for obj_rect in objects [:]:
         screen.blit(object_image, obj_rect.topleft)
         # Перевірка на зіткнення
         if check_collision(slime_rect, obj_rect):
