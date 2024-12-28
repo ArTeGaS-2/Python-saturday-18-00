@@ -48,3 +48,37 @@ class Slime(Entity):
     def lerp(self, a, b, t):
         """ Лінійна інтероляція між "a" та "b" з коефіцієнт "t". """
         return a + (b - a) * t
+    
+    # Метод для анімації
+    def animate(self):
+        # Цільовий масштаб залежно від стану руху
+        target_scale_x = 0.8 if self.moving else 1.0
+        target_scale_y = 1.3 if self.moving else 1.0
+
+        # Плавна зміна масштабу за допомогою інтерполяції
+        self.current_scale_x = self.lerp(
+            self.current_scale_x, target_scale_x, ANIMATTION_SPEED)
+        self.current_scale_y = self.lerp(
+            self.current_scale_y, target_scale_y, ANIMATTION_SPEED)
+        
+        # Масштабування зображення
+        scaled_image = pygame.transform.scale(
+            self.original_image,
+            (int(slime_size * self.current_scale_x),
+             int(slime_size * self.current_scale_y)))
+        
+        # Обертання зображення відповідно до напряму руху
+        rotated_image = pygame.transform.rotate(
+            scaled_image, self.direction)
+        rotated_rect = rotated_image.get_rect(
+            center=self.rect.center)
+        
+        # Оновлення зображення та його прямокутника
+        self.image = rotated_image
+        self.rect = rotated_rect
+
+    # Основний метод оновлення (рух + анімація)
+    def update(self, keys):
+        self.move(keys) # Виклик методу обробки руху
+        self.animate() # Виклик методу обробки анімації
+        
