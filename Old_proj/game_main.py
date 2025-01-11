@@ -23,7 +23,7 @@ def init_game():
 
 def load_slime_image():
     # Завантаження спрайту слайма
-    slime_image = pygame.image.load('slime.png').convert_alpha()
+    slime_image = pygame.image.load('Old_proj\slime.png').convert_alpha()
 
     return pygame.transform.scale(
     slime_image, # посилання на зображення
@@ -31,7 +31,7 @@ def load_slime_image():
 
 def load_object_image():
     # Завантаження спрайту об'єкту
-    object_image = pygame.image.load("object.png").convert_alpha()
+    object_image = pygame.image.load("Old_proj\object.png").convert_alpha()
     return pygame.transform.scale(object_image, (30, 30))
 
 def slime_movemet(keys, slime_x, slime_y, SPEED, direction):
