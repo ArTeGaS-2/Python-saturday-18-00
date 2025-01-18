@@ -52,8 +52,8 @@ class Slime(Entity):
     # Метод для анімації
     def animate(self):
         # Цільовий масштаб залежно від стану руху
-        target_scale_x = 0.8 if self.moving else 1.0
-        target_scale_y = 1.3 if self.moving else 1.0
+        target_scale_x = 1.3 if self.moving else 1.0
+        target_scale_y = 0.8 if self.moving else 1.0
 
         # Плавна зміна масштабу за допомогою інтерполяції
         self.current_scale_x = self.lerp(
@@ -64,8 +64,8 @@ class Slime(Entity):
         # Масштабування зображення
         scaled_image = pygame.transform.scale(
             self.original_image,
-            (int(slime_size * self.current_scale_x),
-             int(slime_size * self.current_scale_y)))
+            (int(slime_size[0] * self.current_scale_x),
+             int(slime_size[1] * self.current_scale_y)))
         
         # Обертання зображення відповідно до напряму руху
         rotated_image = pygame.transform.rotate(

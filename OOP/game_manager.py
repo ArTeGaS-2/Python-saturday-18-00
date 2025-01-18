@@ -56,4 +56,18 @@ class GameManager:
             self.all_sprites.add(obj) 
             self.collectibles.add(obj)
             self.last_spawn_time = current_time # Оновлення часу останнього спавну
-            
+        
+        # Перевірка на зіткнення
+        collided = pygame.sprite.spritecollide(
+            self.slime, self.collectibles, True) 
+        self.collected_objects += len(collided)
+
+    def draw(self):
+        self.screen.fill(self.background_color)
+        self.all_sprites.draw(self.screen)
+        self.display_score()
+
+    def display_score(self):
+        text = self.font.render(f'Зібрано: {self.collected_objects}',
+                                 True, (0,0,0))
+        self.screen.blit(text, (10,10))
