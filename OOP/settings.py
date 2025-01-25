@@ -18,3 +18,8 @@ OBJECT_IMAGE_PATH = 'OOP/assets/object.png'
 
 # Фреймрейт
 FPS = 60
+
+# Параметри вертикального ворога
+ENEMY_IMAGE_PATH = 'OOP/assets/enemy.png'
+ENEMY_SIZE = (50,50)
+VERTICAL_ENEMY_SPEED = 5

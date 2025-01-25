@@ -3,6 +3,9 @@ from settings import(WIDTH, HEIGHT, background_color, spawn_interval, FPS)
 from entities.slime import Slime
 from entities.game_object import GameObject
 
+# Імпортуємо класи ворогів
+from entities.vertical_enemy import VerticalEnemy
+
 class GameManager:
     def __init__(self):
         pygame.init() # Ініціалізація pygame
@@ -20,9 +23,17 @@ class GameManager:
         self.all_sprites = pygame.sprite.Group()
         self.collectibles = pygame.sprite.Group()
 
+        # Група ворогів
+        self.enemies = pygame.sprite.Group()
+
         # Створення слайма
         self.slime = Slime(WIDTH // 2, HEIGHT // 2) # Екземпляр классу Slime
         self.all_sprites.add(self.slime)
+
+        # Створюємо ворогів і додаємо їх у групи
+        vertical_enemy = VerticalEnemy()
+        self.all_sprites.add(vertical_enemy)
+        self.enemies.add(vertical_enemy)
 
         # Час від останнього спавну
         self.last_spawn_time = pygame.time.get_ticks() 
