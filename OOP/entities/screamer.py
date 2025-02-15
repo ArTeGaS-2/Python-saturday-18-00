@@ -21,13 +21,14 @@ class Screamer:
         if not self.active:
             self.active = True
             if self.sound:
-                self.sound.play(-1) # Безкінечне відтворення
+                self.sound.play(loops = 0, maxtime = 2000)
     def deactivate(self):
         """Деактивуємо скрімер"""
         if self.active:
             self.active = False
             if self.sound:
-                self.sound.stop()
+                #self.sound.stop()
+                pass
     def draw(self, screen):
         """Малюємо скрімер на екрані, якщо він активний"""
         if self.active and self.image:

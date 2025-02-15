@@ -6,6 +6,7 @@ from entities.game_object import GameObject
 # Імпортуємо класи ворогів
 from entities.vertical_enemy import VerticalEnemy
 from entities.patrol_enemy import PatrolEnemy
+from entities.crow_enemy import CrowEnemy
 
 # Скрімер
 from entities.screamer import Screamer
