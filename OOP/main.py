@@ -10,6 +10,9 @@ def show_menu():
     start_img = pygame.image.load("OOP/assets/start_button.png").convert_alpha()
     exit_img = pygame.image.load("OOP/assets/exit_button.png").convert_alpha()
 
+    start_img = pygame.transform.scale(start_img,(256,128))
+    exit_img = pygame.transform.scale(exit_img,(256,128))
+
     # Створюємо прямокутники (rect)
     start_rect = start_img.get_rect(center=(400, 250)) # Позиція кнопки Старт
     exit_rect = exit_img.get_rect(center=(400,350))    # Позиція кнопки Вихід

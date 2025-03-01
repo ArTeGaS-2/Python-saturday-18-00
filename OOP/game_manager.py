@@ -6,10 +6,13 @@ from entities.game_object import GameObject
 # Імпортуємо класи ворогів
 from entities.vertical_enemy import VerticalEnemy
 from entities.patrol_enemy import PatrolEnemy
-from entities.crow_enemy import CrowEnemy
+from entities.crow_enemy import CrowEnemy 
 
 # Скрімер
 from entities.screamer import Screamer
+
+import os
+os.environ['SDL_VIDEO_CENTERED'] = '1'
 
 class GameManager:
     def __init__(self):
@@ -50,8 +53,13 @@ class GameManager:
             (WIDTH - 100, HEIGHT - 100),
             (100, HEIGHT - 100)]
         patrol_enemy = PatrolEnemy(patrol_points)
+
         self.all_sprites.add(patrol_enemy)
         self.enemies.add(patrol_enemy)
+
+        crow_enemy = CrowEnemy(self.slime)
+        self.all_sprites.add(crow_enemy)
+        self.enemies.add(crow_enemy)
 
         # Час від останнього спавну
         self.last_spawn_time = pygame.time.get_ticks() 
