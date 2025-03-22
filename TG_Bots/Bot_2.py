@@ -41,10 +41,8 @@ async def handle_message(update: Update, context: ContextTypes.DEFAULT_TYPE):
     message = [system_message] + history
     try:
         response = client.chat.completions.create(
-            model="gpt-4o-mini", # Назва моделі в API
-            messages=message,    # повідомлення
-            max_tokens=150,      # Максимальна довжина повідомлення
-            temperature=0.7      # 
+            model="o3-mini", # Назва моделі в API
+            messages=message,    # повідомлення      
         )
         reply = response.choices[0].message.content.strip()
     except Exception as e:
@@ -61,4 +59,3 @@ def main():
     app.run_polling()                                  
 if __name__ == '__main__':                  
     main()     
-
