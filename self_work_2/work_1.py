@@ -11,3 +11,19 @@
 
 # 4.Виведіть інформацію про кожного персонажа в консоль
 # Інструменти: списки, цикл for, базові типи даних
+
+class Character:
+    def __init__(self, name, level, health):
+        self.name = name
+        self.level = level
+        self.health = health
+
+knight = Character("Artur", 3, 50)
+archer = Character("Orlando Blum", 4, 30)
+mage = Character("Gendalf", 5, 15)
+
+chars = [knight, archer, mage]
+
+for char in chars:
+    print(f"Name:{char.name}, Level:{char.level}, Health: {char.health}")
+    
