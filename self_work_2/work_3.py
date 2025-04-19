@@ -10,17 +10,4 @@ class Character:
             print(f"{self.name} вибуває з гри.")
         else:
             print(f"{self.name} отримав {amount} ушкоджень. Залишилось: {self.health}")
-            
-
-knight = Character("Artur", 3, 50)
-
-knight.take_damage(24)
-
-damage = 14
-if damage > 0:
-    knight.take_damage(damage)
-else:
-    print("Немає пошкоджень.")
-
-
 
