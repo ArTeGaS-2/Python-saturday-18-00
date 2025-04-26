@@ -16,7 +16,7 @@ knight = Character("Artur", 3, 50)
 
 knight.take_damage(24)
 
-damage = 14
+damage = 40
 if damage > 0:
     knight.take_damage(damage)
 else:

@@ -14,6 +14,8 @@ from entities.screamer import Screamer
 import os
 os.environ['SDL_VIDEO_CENTERED'] = '1'
 
+from entities.buttons import PauseButton, ExitButton
+
 class GameManager:
     def __init__(self):
         pygame.init() # Ініціалізація pygame
@@ -65,6 +67,17 @@ class GameManager:
         self.last_spawn_time = pygame.time.get_ticks() 
         self.collected_objects = 0 # Кількість зібраних об'єктів
 
+        # Стан паузи
+        self.paused = False
+
+        # Створюємо кнопки
+        self.pause_button = PauseButton(
+            "OOP/assets/ingame_pause_button.png",
+            (WIDTH - 240, 10), self)
+        self.exit_button = ExitButton(
+            "OOP/assets/ingame_exit_button.png",
+            (WIDTH - 120, 10))
+
     def run(self):
         running = True
         while running:
@@ -81,7 +94,13 @@ class GameManager:
                 pygame.quit()
                 exit()
 
+            self.pause_button.handle_event(event)
+            self.exit_button.handle_event(event)
+
     def update(self):
+        if self.paused:
+            return
+
         keys = pygame.key.get_pressed() # Список клавіш 
         self.all_sprites.update(keys) # Оновлення положення об'єктів
 
@@ -114,6 +133,9 @@ class GameManager:
         self.all_sprites.draw(self.screen)
         self.display_score()
         self.screamer.draw(self.screen)
+
+        self.pause_button.draw(self.screen)
+        self.exit_button.draw(self.screen)
 
     def display_score(self):
         text = self.font.render(f'Зібрано: {self.collected_objects}',

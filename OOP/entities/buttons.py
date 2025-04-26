@@ -19,3 +19,28 @@ class Button:
         pass
 # ----/----/----/----/----/----/----/----/
     
+class PauseButton(Button):
+    """ Кнопка  "Пауза": змінює self.game_manager.paused """
+    def __init__(self, image_path, pos, game_manager):
+        super().__init__(image_path, pos)
+        self.game_manager = game_manager
+
+    def handle_event(self, event):
+        if event.type == pygame.MOUSEBUTTONDOWN:
+        # Отримуємо позицію курсора і перевіряємо чи клік у межах Rect:
+            if self.rect.collidepoint(event.pos):
+                # Перемикаємо паузу
+                self.game_manager.paused = not self.game_manager.paused
+    
+# ----/----/----/----/----/----/----/----/
+
+class ExitButton(Button):
+    def __init__(self, image_path, pos):
+        super().__init__(image_path, pos)
+    
+    def handle_event(self, event):
+        if event.type == pygame.MOUSEBUTTONDOWN:
+            if self.rect.collidepoint(event.pos):
+                pygame.quit()
+                exit()
+    
