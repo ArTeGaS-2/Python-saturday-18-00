@@ -35,6 +35,39 @@ COLORS = [
     (240, 0, 0),     # Z – червоний
 ]
 # ----------------- Функції для логіки -----------------
+
+def create_new_piece():
+    """Створює нову випадкову фігуру на старті зверху"""
+    fig_idx = random.randrange(len(FIGURES)) # індекс фігури
+    shape = [row[:] for row in FIGURES[fig_idx]] # Копія фігури
+    x_start = FIELD_WIDTH // 2 - len(shape[0]) // 2 # центр по ширині
+    y_start = 0 # а у меня встал(внизу)
+    return [shape, fig_idx, x_start, y_start]
+
+def is_collision(piece, dx, dy):
+    """Перевіряє: якщо зсунемо фігуру на dx,dy - на врізання"""
+    shape, idx, px, py = piece # розпаковка списку
+    for row_i, row in enumerate(shape):
+        for col_i, cell in enumerate(row):
+            if cell:
+                x = px + col_i + dx
+                y = py + row_i + dy
+                if x < 0 or x >= FIELD_WIDTH:
+                    return True
+                if y >= FIELD_HEIGHT:
+                    return True
+                if y >= 0 and field[y][x]:
+                    return True
+    return False
+
+def place_piece(piece):
+    """Прикріплює фігуру до поля"""
+    shape, idx, px, py = piece
+    for r, row in enumerate(shape):
+        for c, cell in enumerate(row):
+            if cell:
+
+
 # ----------------- Ініціалізація Pygame -----------------
 pygame.init()
 screen = pygame.display.set_mode((FIELD_WIDTH*CELL_SIZE,
