@@ -66,7 +66,23 @@ def place_piece(piece):
     for r, row in enumerate(shape):
         for c, cell in enumerate(row):
             if cell:
+                x = px + c
+                y = py + r
+                if 0 <= x < FIELD_WIDTH and 0 <= y < FIELD_HEIGHT:
+                    field[y][x] = idx + 1
 
+def clear_full_lines():
+    """Видаляє повні рядки та додає звурху порожні"""
+    global field
+    field = [row for row in field if 0 in row]
+    while len(field) < FIELD_HEIGHT:
+        field.insert(0, [0]*FIELD_WIDTH)
+
+def rotate_piece(piece):
+    """Обертає фігуру на 90° (за годинниковою стрілкою)"""
+    shape, idx, px, py = piece
+    rotated = [list(col) for col in zip(*shape[::-1])]
+    return [rotated, idx, px, py]
 
 # ----------------- Ініціалізація Pygame -----------------
 pygame.init()
@@ -75,7 +91,8 @@ screen = pygame.display.set_mode((FIELD_WIDTH*CELL_SIZE,
 pygame.display.set_caption("Тетріс")
 clock = pygame.time.Clock()
 
-current_piece = new_piece()
+current = create_new_piece()
+
 fall_timer = 0
 game_over = False
 # ----------------- Основний цикл гри -----------------
@@ -84,10 +101,34 @@ while True:
     # Якщо гра завершилась - трохи чекаємо і виходимо
     if game_over:
         pygame.time.wait(2000)
-        pygame.quit()
-        sys.exit()
+        break
     # Обробка подій (клавіші, вихід)
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             pygame.quit()
             sys.exit()
+        if event.type == pygame.KEYDOWN:
+            if event.key == pygame.K_LEFT and not is_collision(    
+                current, -1, 0):
+                current[2] -= 1 # Рух ліворуч
+            elif event.key == pygame.K_RIGHT and not is_collision(    
+                current, 1, 0):
+                current[2] += 1 # Рух праворуч
+            elif event.key == pygame.K_DOWN and not is_collision(    
+                current, 0, 1):
+                current[3] += 1 # "Швидке" падіння
+            elif event.key == pygame.K_UP:
+                rotated = rotate_piece(current)
+                if not is_collision(rotated, 0, 0):
+                    current = rotated
+    
+    fall_timer += clock.get_time()
+    clock.tick(60)
+
+    if fall_timer >= FALL_DELAY:
+        if not is_collision(current, 0, 1):
+            current[3] += 1 # опускаємо фігуру
+        else: 
+            place_piece(current) # закріплюємо
+            clear_full_lines() # перевіряємо на заповнені лінії
+            current = create_new_piece() # нова фігура
