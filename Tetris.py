@@ -132,3 +132,27 @@ while True:
             place_piece(current) # закріплюємо
             clear_full_lines() # перевіряємо на заповнені лінії
             current = create_new_piece() # нова фігура
+            if is_collision(current, 0,0):
+                game_over = True
+        fall_timer = 0
+    
+    screen.fill((20,20,20)) # Фон
+
+    # Малюємо всі встановлені фігури
+    for y, row in enumerate(field):
+        for x, cell in enumerate(row):
+            if cell:
+                pygame.draw.rect(screen,
+                    COLORS[cell-1],
+                    (x*CELL_SIZE,y*CELL_SIZE,CELL_SIZE,CELL_SIZE))
+    
+    shape, idx, px, py = current
+    for r, row in enumerate(shape):
+        for c, cell in enumerate(row):
+            if cell:
+                pygame.draw.rect(screen, COLORS[idx],
+                    ((px+c)*CELL_SIZE, (py+r)*CELL_SIZE,
+                     CELL_SIZE, CELL_SIZE))
+    pygame.display.flip()
+    
+
